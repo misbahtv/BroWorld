@@ -5,6 +5,8 @@ from posts.models import Post,Like,Follow
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
 
+User = get_user_model()
+
 @login_required
 def create_post(request):
     if request.method=='POST':
@@ -49,28 +51,33 @@ def toggle_like(request,post_id):
 
 @login_required
 def toggle_follow(request, user_id):
-    User = get_user_model()
     user_to_follow = get_object_or_404(User,id=user_id)
     if user_to_follow == request.user:
         return HttpResponse(status=400)
     follow = Follow.objects.filter(
-        follower=request.user,
-        following=user_to_follow
-    )
+        follower=request.user,following=user_to_follow)
     if follow.exists():
         follow.delete()
         user_following_author = False
     else:
         Follow.objects.create(
             follower=request.user,
-            following=user_to_follow
-        )
+            following=user_to_follow)
         user_following_author = True
+    followers_count = Follow.objects.filter(following=user_to_follow).count()
+    following_count = Follow.objects.filter(
+        follower=user_to_follow).count()
+    posts = user_to_follow.posts.all()
+
     return render(
         request,
-        'posts/partials/follow_section.html',
+        'posts/partials/profile_stats.html',
         {
             'user_to_follow': user_to_follow,
             'user_following_author': user_following_author,
+            'followers_count': followers_count,
+            'following_count': following_count,
+            'posts': posts,
         }
     )
+

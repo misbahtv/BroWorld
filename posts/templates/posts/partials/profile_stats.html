@@ -1,0 +1,44 @@
+<div id="profile-stats">
+  <div class="d-flex align-items-center mb-3">
+    {% if request.user != user_to_follow %} {% if user_following_author %}
+
+    <button
+      hx-post="{% url 'posts:toggle_follow' user_to_follow.id %}"
+      hx-target="#profile-stats"
+      hx-swap="outerHTML"
+      class="btn btn-danger btn-sm"
+    >
+      Unfollow
+    </button>
+
+    {% else %}
+
+    <button
+      hx-post="{% url 'posts:toggle_follow' user_to_follow.id %}"
+      hx-target="#profile-stats"
+      hx-swap="outerHTML"
+      class="btn btn-outline-primary btn-sm"
+    >
+      Follow
+    </button>
+
+    {% endif %} {% endif %}
+  </div>
+
+  <div class="d-flex gap-4 mb-3">
+    <div>
+      <strong>{{ posts.count }}</strong>
+      Posts
+    </div>
+
+    <div>
+      <strong>{{ followers_count }}</strong>
+      Followers
+    </div>
+
+    <div>
+      <strong>{{ following_count }}</strong>
+      Following
+    </div>
+  </div>
+</div>

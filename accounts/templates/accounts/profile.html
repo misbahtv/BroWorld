@@ -1,0 +1,109 @@
+{% extends 'base.html' %} {% block title %} {{ profile_user.username }}
+{% endblock %} {% block content %}
+
+<div class="container">
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-md-3 text-center">
+          {% if profile_user.profile_picture %}
+
+          <img
+            src="{{ profile_user.profile_picture.url }}"
+            class="rounded-circle img-fluid"
+            style="width: 180px; height: 180px; object-fit: cover"
+          />
+
+          {% else %}
+
+          <img
+            src="https://via.placeholder.com/180"
+            class="rounded-circle img-fluid"
+          />
+
+          {% endif %}
+        </div>
+
+        <div class="col-md-9">
+          <div class="mb-3">
+            <h2 class="mb-0">{{ profile_user.username }}</h2>
+          </div>
+
+          {% include 'posts/partials/profile_stats.html' %}
+
+          <div class="mb-3">
+            <strong> Batch: </strong>
+
+            {{ profile_user.batch }}
+          </div>
+
+          <div class="mb-3">{{ profile_user.bio }}</div>
+
+          <div class="d-flex gap-2">
+            {% if profile_user.github_url %}
+
+            <a
+              href="{{ profile_user.github_url }}"
+              target="_blank"
+              class="btn btn-dark btn-sm"
+            >
+              GitHub
+            </a>
+
+            {% endif %} {% if profile_user.linkedin_url %}
+
+            <a
+              href="{{ profile_user.linkedin_url }}"
+              target="_blank"
+              class="btn btn-primary btn-sm"
+            >
+              LinkedIn
+            </a>
+
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h4 class="mb-3">Posts</h4>
+
+  {% if posts %}
+
+  <div class="row">
+    {% for post in posts %}
+
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        {% if post.image %}
+
+        <img
+          src="{{ post.image.url }}"
+          class="card-img-top"
+          style="height: 250px; object-fit: cover"
+        />
+
+        {% endif %}
+
+        <div class="card-body">
+          <p class="card-text">{{ post.content|truncatechars:100 }}</p>
+        </div>
+
+        <div class="card-footer">
+          <small class="text-muted"> {{ post.created_at }} </small>
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+
+  {% else %}
+
+  <div class="alert alert-info">No posts yet.</div>
+
+  {% endif %}
+</div>
+
+{% endblock %}
