@@ -47,6 +47,7 @@ def toggle_like(request,post_id):
     else:
         Like.objects.create(user=request.user,post=post)
         post.user_liked=True
+    post.like_count=post.likes.count()
     return render(request,'posts/partials/like_section.html',{'post':post})
 
 @login_required
@@ -54,8 +55,7 @@ def toggle_follow(request, user_id):
     user_to_follow = get_object_or_404(User,id=user_id)
     if user_to_follow == request.user:
         return HttpResponse(status=400)
-    follow = Follow.objects.filter(
-        follower=request.user,following=user_to_follow)
+    follow = Follow.objects.filter(follower=request.user,following=user_to_follow)
     if follow.exists():
         follow.delete()
         user_following_author = False
@@ -65,10 +65,8 @@ def toggle_follow(request, user_id):
             following=user_to_follow)
         user_following_author = True
     followers_count = Follow.objects.filter(following=user_to_follow).count()
-    following_count = Follow.objects.filter(
-        follower=user_to_follow).count()
+    following_count = Follow.objects.filter(follower=user_to_follow).count()
     posts = user_to_follow.posts.all()
-
     return render(
         request,
         'posts/partials/profile_stats.html',
@@ -81,3 +79,15 @@ def toggle_follow(request, user_id):
         }
     )
 
+@login_required
+def remove_following(request,user_id):
+    user_to_unfollow=get_object_or_404(User,id=user_id)
+
+    Follow.objects.filter(follower=request.user,following=user_to_unfollow).delete()
+    return HttpResponse('')
+
+@login_required
+def remove_follower(request,user_id):
+    user_to_remove=get_object_or_404(User,id=user_id)
+    Follow.objects.filter(follower=user_to_remove,following=request.user).delete()
+    return HttpResponse('')

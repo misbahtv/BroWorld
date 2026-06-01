@@ -1,5 +1,5 @@
-{% extends 'base.html' %} {% block title %} {{ profile_user.username }}
-{% endblock %} {% block content %}
+{% extends 'base.html' %} {% block title %} {{ profile_user.username }} {% endblock %} 
+{% block content %}
 
 <div class="container">
   <div class="card shadow-sm mb-4">
@@ -25,8 +25,19 @@
         </div>
 
         <div class="col-md-9">
-          <div class="mb-3">
+          <div class="d-flex align-items-center gap-3 mb-3">
             <h2 class="mb-0">{{ profile_user.username }}</h2>
+
+            {% if profile_user == request.user %}
+
+            <a
+              href="{% url 'accounts:edit_profile' %}"
+              class="btn btn-outline-secondary btn-sm"
+            >
+              Edit Profile
+            </a>
+
+            {% endif %}
           </div>
 
           {% include 'posts/partials/profile_stats.html' %}

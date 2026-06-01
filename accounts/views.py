@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect,get_object_or_404
-from .forms import RegistrationForm,LoginForm
+from .forms import RegistrationForm,LoginForm,UserUpdateForm
 from django.contrib.auth import login,logout
 from django.contrib.auth.decorators import login_required
 from posts.models import Post,Follow
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 
 User=get_user_model()
 
@@ -12,6 +13,7 @@ def feed(request):
     posts=Post.objects.select_related('user').order_by('-created_at')
     for post in posts:
         post.user_liked=post.likes.filter(user=request.user).exists()
+        post.like_count=post.likes.count()
         post.user_following_author=Follow.objects.filter(follower=request.user,following=post.user).exists()
         post.user_to_follow=post.user
     return render(request,'accounts/feed.html',{'posts':posts})
@@ -60,6 +62,33 @@ def profile_user(request,user_id):
                                                 "followers_count":followers_count,
                                                 "following_count":following_count,
                                                 "user_following_author":user_following_profile_user,
-                                                "user_to_follow": profile_user
+                                                "user_to_follow": profile_user,
+                                                'source':'profile'
                                                 }
                                             )
+
+
+@login_required
+def edit_profile(request):
+    if request.method=='POST':
+        form=UserUpdateForm(request.POST,request.FILES,instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('accounts:profile',user_id=request.user.id)
+    else:
+        form=UserUpdateForm(instance=request.user)
+    return render(request,'accounts/edit_profile.html',{'form':form})
+
+
+@login_required
+def followers_list(request,user_id):
+    profile_user=get_object_or_404(User,id=user_id)
+    followers=Follow.objects.select_related('follower').filter(following=profile_user)
+    return render(request,'accounts/followers_list.html',{'profile_user': profile_user,'followers': followers})
+
+@login_required
+def following_list(request,user_id):
+    profile_user=get_object_or_404(User,id=user_id)
+    following=Follow.objects.select_related('following').filter(follower=profile_user)
+    return render(request,'accounts/following_list.html',{'profile_user': profile_user,'following': following})
+

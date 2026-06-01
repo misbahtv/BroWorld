@@ -1,20 +1,18 @@
 <div id="like-section-{{ post.id }}">
+  <button
+    hx-post="{% url 'posts:toggle_like' post.id %}"
+    hx-target="#like-section-{{ post.id }}"
+    hx-swap="outerHTML"
+    class="btn btn-link text-decoration-none p-0"
+  >
+    {% if post.user_liked %}
+    <i class="bi bi-heart-fill text-danger fs-4"></i>
+    {% else %}
+    <i class="bi bi-heart fs-4 text-dark"></i>
+    {% endif %}
+  </button>
 
-    <button
-        hx-post="{% url 'posts:toggle_like' post.id %}"
-        hx-target="#like-section-{{ post.id }}"
-        hx-swap="outerHTML"
-        class="btn btn-outline-primary btn-sm"
-    >
-        {% if post.user_liked %}
-        Unlike
-        {% else %}
-        Like
-        {% endif %}
-    </button>
-
-    <span>
-        {{ post.likes.count }} Like{{ post.likes.count|pluralize }}
-    </span>
-
+  <span class="ms-2">
+    {{ post.like_count }}
+  </span>
 </div>

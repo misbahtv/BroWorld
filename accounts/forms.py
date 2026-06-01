@@ -17,3 +17,17 @@ class RegistrationForm(UserCreationForm):
 
 class LoginForm(AuthenticationForm):
     pass
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model=User
+        fields = [
+            'username',
+            'email',
+            'batch',
+            'bio',
+            'github_url',
+            'linkedin_url',
+            'profile_picture',
+        ]

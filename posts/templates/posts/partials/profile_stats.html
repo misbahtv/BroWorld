@@ -1,44 +1,48 @@
 <div id="profile-stats">
-  <div class="d-flex align-items-center mb-3">
-    {% if request.user != user_to_follow %} {% if user_following_author %}
+  {% if request.user != user_to_follow %} {% if user_following_author %}
 
-    <button
-      hx-post="{% url 'posts:toggle_follow' user_to_follow.id %}"
-      hx-target="#profile-stats"
-      hx-swap="outerHTML"
-      class="btn btn-danger btn-sm"
-    >
-      Unfollow
-    </button>
+  <button
+    hx-post="{% url 'posts:toggle_follow' user_to_follow.id %}"
+    hx-target="#profile-stats"
+    hx-swap="outerHTML"
+    class="btn btn-danger btn-sm mb-3"
+  >
+    Unfollow
+  </button>
 
-    {% else %}
+  {% else %}
 
-    <button
-      hx-post="{% url 'posts:toggle_follow' user_to_follow.id %}"
-      hx-target="#profile-stats"
-      hx-swap="outerHTML"
-      class="btn btn-outline-primary btn-sm"
-    >
-      Follow
-    </button>
+  <button
+    hx-post="{% url 'posts:toggle_follow' user_to_follow.id %}"
+    hx-target="#profile-stats"
+    hx-swap="outerHTML"
+    class="btn btn-outline-primary btn-sm mb-3"
+  >
+    Follow
+  </button>
 
-    {% endif %} {% endif %}
-  </div>
+  {% endif %} {% endif %}
 
-  <div class="d-flex gap-4 mb-3">
+  <div class="d-flex gap-5 mb-3">
     <div>
-      <strong>{{ posts.count }}</strong>
+      <strong>{{ posts.count }}</strong><br />
       Posts
     </div>
 
-    <div>
-      <strong>{{ followers_count }}</strong>
+    <a
+      href="{% url 'accounts:followers_list' user_to_follow.id %}"
+      class="text-decoration-none text-dark"
+    >
+      <strong>{{ followers_count }}</strong><br />
       Followers
-    </div>
+    </a>
 
-    <div>
-      <strong>{{ following_count }}</strong>
+    <a
+      href="{% url 'accounts:following_list' user_to_follow.id %}"
+      class="text-decoration-none text-dark"
+    >
+      <strong>{{ following_count }}</strong><br />
       Following
-    </div>
+    </a>
   </div>
 </div>
