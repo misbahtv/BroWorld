@@ -1,0 +1,27 @@
+{% if request.user != user_to_follow %}
+<div id="follow-section-{{ user_to_follow.id }}">
+  {% if user_following_author %}
+
+  <button
+    hx-post="{% url 'posts:toggle_follow' user_to_follow.id %}"
+    hx-target="#follow-section-{{ user_to_follow.id }}"
+    hx-swap="outerHTML"
+    class="btn btn-danger btn-sm"
+  >
+    Unfollow
+  </button>
+
+  {% else %}
+
+  <button
+    hx-post="{% url 'posts:toggle_follow' user_to_follow.id %}"
+    hx-target="#follow-section-{{ user_to_follow.id }}"
+    hx-swap="outerHTML"
+    class="btn btn-outline-primary btn-sm"
+  >
+    Follow
+  </button>
+
+  {% endif %}
+</div>
+{% endif %}

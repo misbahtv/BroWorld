@@ -1,0 +1,93 @@
+{% extends 'base.html' %} {% block title %} Post Details {% endblock %} 
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <a href="{% url 'accounts:feed' %}" class="btn btn-outline-secondary mb-3">
+      ← Back to Feed
+    </a>
+
+    <!-- Post Card -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <strong> {{ post.user.username }} </strong>
+
+            {% if post.user.batch %}
+            <div>
+              <small class="text-muted"> Batch: {{ post.user.batch }} </small>
+            </div>
+            {% endif %}
+          </div>
+
+          <small class="text-muted"> {{ post.created_at }} </small>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <p class="card-text">{{ post.content }}</p>
+
+        {% if post.image %}
+        <img
+          src="{{ post.image.url }}"
+          class="img-fluid rounded"
+          alt="Post Image"
+        />
+        {% endif %}
+      </div>
+
+      <div class="card-footer">
+        {% include 'posts/partials/like_section.html' %}
+
+        <span class="ms-3 text-muted">
+          {{ comments.count }} Comment{{ comments.count|pluralize }}
+        </span>
+      </div>
+    </div>
+
+    <!-- Comment Form -->
+    <div class="card shadow-sm mb-4">
+      <div class="card-header">Add Comment</div>
+
+      <div class="card-body">
+        <form method="POST">
+          {% csrf_token %} {{ comment_form.as_p }}
+
+          <button type="submit" class="btn btn-primary">Post Comment</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="card shadow-sm">
+      <div class="card-header">Comments</div>
+
+      <div class="card-body">
+        {% for comment in comments %}
+
+        <div class="border-bottom pb-3 mb-3">
+          <div class="d-flex justify-content-between">
+            <strong> {{ comment.user.username }} </strong>
+
+            <small class="text-muted"> {{ comment.created_at }} </small>
+          </div>
+
+          <p class="mt-2 mb-0">{{ comment.content }}</p>
+        </div>
+
+        {% empty %}
+
+        <div class="text-center text-muted py-4">
+          <h6>No comments yet</h6>
+
+          <p class="mb-0">Be the first person to comment.</p>
+        </div>
+
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

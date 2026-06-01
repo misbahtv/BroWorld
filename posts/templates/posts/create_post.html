@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block title %} Create Post {% endblock %} 
+{% block content %}
+
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-header">
+        <h3 class="mb-0">Create New Post</h3>
+      </div>
+
+      <div class="card-body">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %} {{ form.as_p }}
+
+          <button type="submit" class="btn btn-primary">Publish Post</button>
+
+          <a href="{% url 'accounts:feed' %}" class="btn btn-secondary">
+            Cancel
+          </a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

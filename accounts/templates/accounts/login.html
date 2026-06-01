@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+
+<div class="row justify-content-center">
+
+<div class="col-md-6">
+
+    <div class="card shadow-sm">
+
+        <div class="card-header">
+            <h3 class="mb-0">
+                Login
+            </h3>
+        </div>
+
+        <div class="card-body">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit"
+                        class="btn btn-primary w-100">
+                    Login
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="card-footer text-center">
+
+            Don't have an account?
+
+            <a href="{% url 'accounts:register' %}">
+                Register
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+</div>
+
+{% endblock %}
