@@ -92,3 +92,26 @@ def following_list(request,user_id):
     following=Follow.objects.select_related('following').filter(follower=profile_user)
     return render(request,'accounts/following_list.html',{'profile_user': profile_user,'following': following})
 
+
+@login_required
+def user_search(request):
+    query = request.GET.get('q', '')
+    users = User.objects.none()
+
+    if query:
+        users = User.objects.filter(
+            username__icontains=query).exclude(id=request.user.id)
+        following_ids = set(Follow.objects.filter(follower=request.user).values_list('following_id',flat=True))
+
+        for user in users:
+            user.user_following_author = (user.id in following_ids)
+
+    context = {
+        'users': users,
+        'query': query,
+    }
+
+    if request.htmx:
+        return render(request,'accounts/partials/search_results.html',context)
+
+    return render(request,'accounts/search.html',context)
