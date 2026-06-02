@@ -9,46 +9,6 @@
   </a>
 </div>
 
-{% for post in posts %}
+<div id="feed-posts">{% include 'accounts/partials/post_list.html' %}</div>
 
-<div class="card mb-4">
-  <div class="card-header d-flex justify-content-between align-items-center">
-    <div>
-      <strong> {{ post.user.username }} </strong>
-
-      <small class="text-muted ms-2"> {{ post.created_at }} </small>
-    </div>
-
-    <a
-      href="{% url 'accounts:profile' post.user.id %}"
-      class="btn btn-outline-primary btn-sm"
-    >
-      View Profile
-    </a>
-  </div>
-
-  <div class="card-body">
-    <p>{{ post.content }}</p>
-
-    {% if post.image %}
-    <img src="{{ post.image.url }}" class="img-fluid rounded" />
-    {% endif %}
-  </div>
-
-  <div class="card-footer d-flex align-items-center gap-2">
-    {% include 'posts/partials/like_section.html' %}
-
-    <a
-      href="{% url 'posts:detail_post' post.id %}"
-      class="btn btn-outline-secondary btn-sm"
-    >
-      Comment
-    </a>
-  </div>
-</div>
-
-{% empty %}
-
-<div class="alert alert-info">No posts yet.</div>
-
-{% endfor %} {% endblock %}
+{% endblock %}
