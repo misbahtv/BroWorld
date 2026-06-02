@@ -10,7 +10,11 @@
     <title>{% block title %} BroWorld {% endblock %}</title>
 
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
+    />
 
     {% block extra_css %} {% endblock %}
   </head>
@@ -24,9 +28,40 @@
           BroWorld
         </a>
 
-        <div class="d-flex align-items-center">
-          {% if request.user.is_authenticated %}
+        {% if request.user.is_authenticated %}
 
+        <div class="d-flex align-items-center gap-4">
+          <a href="#" class="nav-link text-white">
+            <i class="bi bi-house-fill"></i>
+            Home
+          </a>
+
+          <a href="{% url 'accounts:feed' %}" class="nav-link text-white">
+            <i class="bi bi-globe"></i>
+            Social
+          </a>
+
+          <a
+            href="{% url 'accounts:user_search' %}"
+            class="nav-link text-white"
+          >
+            <i class="bi bi-search"></i>
+            Search
+          </a>
+
+          <a href="#" class="nav-link text-white position-relative">
+            <i class="bi bi-bell"></i>
+            Notifications
+
+            <span
+              class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            >
+              0
+            </span>
+          </a>
+        </div>
+
+        <div class="d-flex align-items-center">
           <a
             href="{% url 'accounts:profile' request.user.id %}"
             class="d-flex align-items-center text-decoration-none text-white me-3"
@@ -41,10 +76,10 @@
 
             {% else %}
 
-            <img
-              src="https://via.placeholder.com/40"
-              class="rounded-circle border border-light me-2"
-            />
+            <i
+              class="bi bi-person-circle text-white me-2"
+              style="font-size: 2rem"
+            ></i>
 
             {% endif %}
 
@@ -57,9 +92,11 @@
           >
             Logout
           </a>
+        </div>
 
-          {% else %}
+        {% else %}
 
+        <div>
           <a
             href="{% url 'accounts:login' %}"
             class="btn btn-outline-light btn-sm me-2"
@@ -73,9 +110,9 @@
           >
             Register
           </a>
-
-          {% endif %}
         </div>
+
+        {% endif %}
       </div>
     </nav>
 
