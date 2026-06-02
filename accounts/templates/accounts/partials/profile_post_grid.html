@@ -1,0 +1,49 @@
+<div class="row">
+  {% for post in page_obj %}
+
+  <div class="col-md-4 mb-4">
+    <div class="card h-100">
+      {% if post.image %}
+
+      <img
+        src="{{ post.image.url }}"
+        class="card-img-top"
+        style="height: 250px; object-fit: cover"
+      />
+
+      {% endif %}
+
+      <div class="card-body">
+        <p class="card-text">{{ post.content|truncatechars:100 }}</p>
+      </div>
+
+      <div class="card-footer">
+        <small class="text-muted"> {{ post.created_at }} </small>
+      </div>
+    </div>
+  </div>
+
+  {% empty %}
+
+  <div class="col-12">
+    <div class="alert alert-info">No posts yet.</div>
+  </div>
+
+  {% endfor %}
+</div>
+
+{% if page_obj.has_next %}
+
+<div
+  hx-get="?page={{ page_obj.next_page_number }}"
+  hx-trigger="revealed"
+  hx-swap="outerHTML"
+>
+  <div class="text-center py-3">
+    <div class="spinner-border spinner-border-sm me-2"></div>
+
+    Loading more posts...
+  </div>
+</div>
+
+{% endif %}

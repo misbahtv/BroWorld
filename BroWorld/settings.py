@@ -28,10 +28,12 @@ INSTALLED_APPS = [
     'accounts',
     'posts',
     'django_htmx',
+    'debug_toolbar'
 
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -118,3 +120,7 @@ MEDIA_ROOT= BASE_DIR / 'media'
 AUTH_USER_MODEL='accounts.User'
 
 LOGIN_URL='accounts:login'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]

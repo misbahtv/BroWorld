@@ -24,14 +24,14 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
       <div class="container">
-        <a class="navbar-brand fw-bold" href="{% url 'accounts:feed' %}">
+        <a class="navbar-brand fw-bold" href="{% url 'accounts:home' %}">
           BroWorld
         </a>
 
         {% if request.user.is_authenticated %}
 
         <div class="d-flex align-items-center gap-4">
-          <a href="#" class="nav-link text-white">
+          <a href="{% url 'accounts:home' %}" class="nav-link text-white">
             <i class="bi bi-house-fill"></i>
             Home
           </a>
